@@ -2,6 +2,7 @@ from urllib.error import HTTPError,URLError
 from bs4 import BeautifulSoup
 import requests
 import pandas as pd
+import re
 
 def function(url):
     try:
@@ -13,11 +14,7 @@ def function(url):
             if(tag['alt']!='loading' and tag['alt']!='list image'):
                 l1.append(tag['alt'])
         for i in  bs.find_all('span',attrs={'class':{'lister-item-year text-muted unbold'}}):
-            k = i.get_text()
-            if("I" not in k):
-                k = k[1:5]
-            else:
-                k = k[5:9]
+            k = re.findall(r'\b\d+\b',i.get_text())
             l2.append(k)
         return l1,l2
     except HTTPError as e:
